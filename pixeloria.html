@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PIXELORIA — Build. Play. Explore.</title>
+<style>
+:root {
+  --sky: #f0f7ff;
+  --cloud: #ffffff;
+  --meadow: #e8f5e9;
+  --sun: #fff9e6;
+  --coral: #ff6b6b;
+  --violet: #7c5cfc;
+  --teal: #00bcd4;
+  --lime: #4caf50;
+  --amber: #ff9800;
+  --rose: #e91e8c;
+  --ink: #1a1a2e;
+  --slate: #4a4a6a;
+  --soft: #8888aa;
+  --border: #dde3f0;
+  --card: #ffffff;
+  --shadow: 0 4px 20px rgba(124,92,252,0.10);
+  --shadow-hover: 0 8px 32px rgba(124,92,252,0.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--sky);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:60px;background:var(--cloud);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(124,92,252,0.08);}
+.logo{font-size:24px;font-weight:900;cursor:pointer;letter-spacing:-1px;}
+.logo .px{color:var(--violet);}
+.logo .el{color:var(--coral);}
+.logo .or{color:var(--amber);}
+.logo .ia{color:var(--teal);}
+.nav-tabs{display:flex;gap:4px;}
+.nav-tab{padding:7px 15px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;color:var(--slate);transition:all .18s;border:none;background:transparent;}
+.nav-tab:hover{background:var(--sky);color:var(--violet);}
+.nav-tab.active{background:var(--violet);color:#fff;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.pxc-pill{background:linear-gradient(135deg,var(--amber),var(--coral));color:#fff;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;}
+.user-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--rose));display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;border:2px solid var(--border);}
+
+/* ── SCREENS ── */
+.screen{display:none;padding:28px;max-width:1200px;margin:0 auto;}
+.screen.active{display:block;}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#ede7ff 0%,#e3f2fd 50%,#fce4ec 100%);border-radius:24px;padding:52px 44px;margin-bottom:28px;position:relative;overflow:hidden;border:2px solid var(--border);}
+.hero-bubbles{position:absolute;top:0;right:0;width:320px;height:100%;display:flex;align-items:center;justify-content:center;font-size:80px;flex-wrap:wrap;gap:8px;opacity:.18;pointer-events:none;user-select:none;}
+.hero h1{font-size:44px;font-weight:900;line-height:1.1;margin-bottom:14px;color:var(--ink);}
+.hero h1 em{font-style:normal;background:linear-gradient(90deg,var(--violet),var(--rose),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero p{color:var(--slate);font-size:16px;max-width:520px;margin-bottom:26px;line-height:1.65;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.btn{padding:12px 26px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:6px;}
+.btn-violet{background:var(--violet);color:#fff;}
+.btn-violet:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(124,92,252,0.35);}
+.btn-coral{background:var(--coral);color:#fff;}
+.btn-coral:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,107,107,0.35);}
+.btn-outline{background:transparent;color:var(--violet);border:2px solid var(--violet);}
+.btn-outline:hover{background:var(--violet);color:#fff;}
+
+/* ── STATS BAR ── */
+.stats-bar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;}
+.stat-card{background:var(--card);border-radius:14px;padding:16px 20px;flex:1;min-width:120px;border:2px solid var(--border);box-shadow:var(--shadow);}
+.stat-val{font-size:24px;font-weight:900;}
+.stat-lbl{font-size:11px;color:var(--soft);margin-top:2px;font-weight:600;}
+
+/* ── SECTION ── */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.section-hdr h2{font-size:18px;font-weight:900;color:var(--ink);}
+.see-all{font-size:12px;color:var(--violet);cursor:pointer;font-weight:700;}
+
+/* ── CATEGORIES ── */
+.cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.cat{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid var(--border);color:var(--slate);background:var(--card);transition:all .18s;}
+.cat.active,.cat:hover{border-color:var(--violet);color:var(--violet);background:#ede7ff;}
+
+/* ── GAME GRID ── */
+.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;margin-bottom:28px;}
+.game-card{background:var(--card);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .2s;border:2px solid var(--border);box-shadow:var(--shadow);}
+.game-card:hover{transform:translateY(-4px);border-color:var(--violet);box-shadow:var(--shadow-hover);}
+.game-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;}
+.gbadge{position:absolute;top:8px;right:8px;color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;}
+.gbadge.hot{background:var(--coral);}
+.gbadge.new{background:var(--lime);}
+.game-info{padding:12px 14px;}
+.game-title{font-size:13px;font-weight:800;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);}
+.game-meta{font-size:11px;color:var(--soft);display:flex;justify-content:space-between;align-items:center;}
+.live-dot{width:6px;height:6px;background:var(--lime);border-radius:50%;display:inline-block;animation:blink 1.4s infinite;margin-right:4px;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* ── GAME AREA (actual playable game) ── */
+.game-area-wrap{background:var(--card);border-radius:20px;border:2px solid var(--border);overflow:hidden;box-shadow:var(--shadow);}
+.game-toolbar{display:flex;align-items:center;gap:10px;padding:12px 18px;background:linear-gradient(90deg,#ede7ff,#e3f2fd);border-bottom:2px solid var(--border);flex-wrap:wrap;}
+.game-toolbar-title{font-weight:900;font-size:15px;color:var(--violet);flex:1;}
+.game-stat-pill{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;color:var(--slate);}
+.game-canvas-wrap{position:relative;background:linear-gradient(180deg,#87ceeb 0%,#87ceeb 60%,#4caf50 60%,#388e3c 100%);height:420px;overflow:hidden;cursor:crosshair;}
+#gameCanvas{display:block;width:100%;height:100%;}
+.game-controls{display:flex;align-items:center;gap:8px;padding:12px 18px;background:#f8f9ff;border-top:2px solid var(--border);flex-wrap:wrap;}
+.ctrl-btn{padding:9px 20px;border-radius:12px;font-size:13px;font-weight:800;cursor:pointer;border:2px solid var(--border);background:var(--card);color:var(--slate);transition:all .18s;}
+.ctrl-btn:hover,.ctrl-btn.active{background:var(--violet);color:#fff;border-color:var(--violet);}
+.ctrl-btn.red{background:var(--coral);color:#fff;border-color:var(--coral);}
+.ctrl-btn.green{background:var(--lime);color:#fff;border-color:var(--lime);}
+.score-display{background:linear-gradient(135deg,var(--amber),var(--coral));color:#fff;padding:8px 18px;border-radius:12px;font-size:14px;font-weight:900;margin-left:auto;}
+
+/* ── AVATAR ── */
+.avatar-layout{display:grid;grid-template-columns:1fr 300px;gap:20px;}
+.avatar-preview{background:linear-gradient(160deg,#ede7ff,#e3f2fd);border-radius:20px;border:2px solid var(--border);padding:36px 24px;display:flex;flex-direction:column;align-items:center;}
+.px-char{position:relative;width:120px;height:180px;margin-bottom:20px;}
+.px-head{width:72px;height:72px;border-radius:50%;margin:0 auto;border:3px solid rgba(0,0,0,.1);display:flex;align-items:center;justify-content:center;font-size:28px;background:#fdd7b0;}
+.px-body{width:80px;height:80px;border-radius:14px 14px 4px 4px;margin:0 auto;background:var(--violet);}
+.px-legs{display:flex;justify-content:center;gap:8px;}
+.px-leg{width:26px;height:52px;border-radius:0 0 10px 10px;background:#1a1a2e;}
+.px-arms{display:flex;justify-content:space-between;margin-top:-58px;padding:0 -8px;}
+.px-arm{width:18px;height:52px;border-radius:9px;background:var(--violet);}
+.av-name{font-size:17px;font-weight:900;color:var(--ink);margin-bottom:4px;}
+.av-level{font-size:12px;color:var(--soft);font-weight:600;}
+.avatar-options{background:var(--card);border-radius:20px;border:2px solid var(--border);padding:20px;overflow-y:auto;max-height:520px;box-shadow:var(--shadow);}
+.opt-sec{margin-bottom:18px;}
+.opt-lbl{font-size:11px;font-weight:800;color:var(--soft);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+.opt-row{display:flex;flex-wrap:wrap;gap:8px;}
+.opt-chip{padding:7px 14px;border-radius:20px;background:var(--sky);border:2px solid var(--border);font-size:13px;cursor:pointer;transition:all .15s;font-weight:600;}
+.opt-chip:hover,.opt-chip.sel{background:var(--violet);color:#fff;border-color:var(--violet);}
+.swatch{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .15s;}
+.swatch:hover,.swatch.sel{border-color:var(--ink);transform:scale(1.15);}
+.av-input{width:100%;background:var(--sky);border:2px solid var(--border);border-radius:12px;padding:10px 14px;color:var(--ink);font-size:14px;font-weight:700;outline:none;}
+.av-input:focus{border-color:var(--violet);}
+
+/* ── MARKETPLACE ── */
+.mkt-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.mkt-tab{padding:8px 18px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;color:var(--slate);border:2px solid var(--border);background:var(--card);transition:all .18s;}
+.mkt-tab.active{background:var(--violet);color:#fff;border-color:var(--violet);}
+.mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px;}
+.mkt-card{background:var(--card);border-radius:16px;border:2px solid var(--border);overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);}
+.mkt-card:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(0,188,212,.15);transform:translateY(-2px);}
+.mkt-thumb{height:110px;display:flex;align-items:center;justify-content:center;font-size:42px;}
+.mkt-info{padding:12px 14px;}
+.mkt-name{font-size:12px;font-weight:800;margin-bottom:8px;color:var(--ink);}
+.mkt-row{display:flex;align-items:center;justify-content:space-between;}
+.price-tag{font-size:13px;font-weight:900;color:var(--amber);}
+.buy-btn{background:var(--lime);color:#fff;border:none;padding:5px 12px;border-radius:9px;font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;}
+.buy-btn:hover{background:#388e3c;}
+
+/* ── SOCIAL ── */
+.social-layout{display:grid;grid-template-columns:270px 1fr;gap:20px;}
+.friends-panel{background:var(--card);border-radius:20px;border:2px solid var(--border);padding:20px;box-shadow:var(--shadow);}
+.friends-hdr{font-size:14px;font-weight:900;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;color:var(--ink);}
+.add-btn{font-size:11px;background:var(--violet);color:#fff;padding:5px 12px;border-radius:9px;cursor:pointer;font-weight:700;}
+.friend-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1.5px solid var(--border);}
+.friend-row:last-child{border:none;}
+.f-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--rose));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.f-name{font-size:13px;font-weight:800;color:var(--ink);}
+.f-status{font-size:11px;color:var(--soft);}
+.sdot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
+.s-on{background:var(--lime);}
+.s-gm{background:var(--teal);}
+.s-off{background:var(--border);}
+.chat-wrap{background:var(--card);border-radius:20px;border:2px solid var(--border);padding:20px;display:flex;flex-direction:column;box-shadow:var(--shadow);}
+.chat-title{font-size:14px;font-weight:900;color:var(--ink);margin-bottom:14px;}
+.chat-messages{flex:1;min-height:280px;max-height:320px;overflow-y:auto;margin-bottom:14px;display:flex;flex-direction:column;gap:10px;}
+.chat-msg{display:flex;gap:10px;}
+.chat-msg.self{flex-direction:row-reverse;}
+.c-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--violet),var(--teal));display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.c-bub{background:var(--sky);border-radius:14px;padding:10px 14px;font-size:13px;max-width:72%;border:1.5px solid var(--border);}
+.c-bub .cn{font-size:11px;font-weight:800;color:var(--violet);margin-bottom:3px;}
+.chat-msg.self .c-bub{background:#ede7ff;border-color:var(--violet);}
+.chat-irow{display:flex;gap:10px;}
+.chat-inp{flex:1;background:var(--sky);border:2px solid var(--border);border-radius:12px;padding:10px 16px;color:var(--ink);font-size:13px;outline:none;}
+.chat-inp:focus{border-color:var(--violet);}
+.send-btn{background:var(--violet);color:#fff;border:none;padding:10px 20px;border-radius:12px;font-weight:800;cursor:pointer;}
+
+/* ── STUDIO ── */
+.studio-wrap{display:grid;grid-template-columns:190px 1fr 230px;gap:16px;min-height:480px;}
+.studio-side{background:var(--card);border-radius:16px;border:2px solid var(--border);padding:16px;box-shadow:var(--shadow);}
+.st-sec{margin-bottom:16px;}
+.st-sec-title{font-size:11px;font-weight:800;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.st-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;cursor:pointer;font-size:12px;font-weight:700;color:var(--slate);transition:all .15s;}
+.st-item:hover,.st-item.active{background:var(--sky);color:var(--violet);}
+.studio-canvas{background:linear-gradient(180deg,#bde0ff 0%,#bde0ff 55%,#a5d6a7 55%,#81c784 100%);border-radius:16px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden;}
+.st-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);background-size:36px 36px;}
+.st-world{position:relative;z-index:1;display:grid;grid-template-columns:repeat(6,52px);gap:6px;}
+.st-tile{width:52px;height:52px;border-radius:10px;cursor:pointer;transition:all .15s;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;font-size:22px;background:rgba(255,255,255,.25);}
+.st-tile:hover{border-color:#fff;transform:scale(1.08);background:rgba(255,255,255,.55);}
+.st-tile.filled{background:rgba(255,255,255,.7);}
+.st-tool-lbl{position:absolute;bottom:12px;left:14px;font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.35);padding:4px 10px;border-radius:8px;z-index:2;}
+.st-props{background:var(--card);border-radius:16px;border:2px solid var(--border);padding:16px;box-shadow:var(--shadow);}
+.prop-lbl{font-size:11px;font-weight:700;color:var(--soft);margin-bottom:5px;}
+.prop-inp{width:100%;background:var(--sky);border:2px solid var(--border);border-radius:10px;padding:8px 12px;color:var(--ink);font-size:12px;outline:none;margin-bottom:10px;}
+.prop-inp:focus{border-color:var(--violet);}
+
+/* ── AI ── */
+.ai-wrap{max-width:780px;margin:0 auto;}
+.ai-hdr{text-align:center;margin-bottom:24px;}
+.ai-hdr h2{font-size:26px;font-weight:900;color:var(--violet);}
+.ai-hdr p{color:var(--soft);font-size:14px;margin-top:6px;}
+.ai-box{background:var(--card);border-radius:20px;border:2px solid var(--border);overflow:hidden;box-shadow:var(--shadow);}
+.ai-msgs{min-height:340px;max-height:380px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
+.ai-msg{display:flex;gap:12px;}
+.ai-msg.user{flex-direction:row-reverse;}
+.ai-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:linear-gradient(135deg,var(--violet),var(--teal));}
+.ai-icon.user{background:linear-gradient(135deg,var(--coral),var(--amber));}
+.ai-text{background:var(--sky);border-radius:14px;padding:12px 16px;font-size:13px;max-width:80%;line-height:1.65;border:1.5px solid var(--border);color:var(--ink);}
+.ai-msg.user .ai-text{background:#ede7ff;border-color:var(--violet);}
+.ai-think{display:flex;gap:5px;align-items:center;}
+.ai-d{width:8px;height:8px;border-radius:50%;background:var(--violet);animation:bob .9s infinite;}
+.ai-d:nth-child(2){animation-delay:.2s;}
+.ai-d:nth-child(3){animation-delay:.4s;}
+@keyframes bob{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-7px);}}
+.ai-foot{padding:14px 18px;border-top:2px solid var(--border);display:flex;gap:10px;background:#fafbff;}
+.ai-inp{flex:1;background:var(--sky);border:2px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--ink);font-size:13px;outline:none;}
+.ai-inp:focus{border-color:var(--violet);}
+.ai-send{background:var(--violet);color:#fff;border:none;padding:12px 22px;border-radius:12px;font-weight:800;cursor:pointer;}
+.ai-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
+.preset{background:var(--card);border:2px solid var(--border);color:var(--slate);padding:7px 14px;border-radius:20px;font-size:12px;cursor:pointer;font-weight:700;transition:all .18s;}
+.preset:hover{border-color:var(--violet);color:var(--violet);background:#ede7ff;}
+
+/* ── LEGAL SCREEN ── */
+.legal-wrap{max-width:860px;margin:0 auto;}
+.legal-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.legal-tab{padding:9px 20px;border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;border:2px solid var(--border);background:var(--card);color:var(--slate);transition:all .18s;}
+.legal-tab.active{background:var(--coral);color:#fff;border-color:var(--coral);}
+.legal-doc{background:var(--card);border-radius:20px;border:2px solid var(--border);padding:36px 40px;box-shadow:var(--shadow);display:none;}
+.legal-doc.active{display:block;}
+.legal-doc h1{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:6px;}
+.legal-doc .eff{font-size:12px;color:var(--soft);margin-bottom:24px;font-weight:600;}
+.legal-doc h2{font-size:15px;font-weight:800;color:var(--violet);margin:20px 0 8px;}
+.legal-doc p,.legal-doc li{font-size:13px;line-height:1.8;color:var(--slate);}
+.legal-doc ul{padding-left:20px;margin:6px 0;}
+.legal-doc .notice-box{background:linear-gradient(135deg,#fff9e6,#fce4ec);border:2px solid var(--amber);border-radius:14px;padding:16px 20px;margin:16px 0;font-size:13px;font-weight:700;color:var(--ink);}
+.legal-doc .badge-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;}
+.legal-badge{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:800;}
+.lb-copy{background:#ede7ff;color:var(--violet);}
+.lb-age{background:#e3f2fd;color:var(--teal);}
+.lb-trade{background:#fce4ec;color:var(--rose);}
+.lb-reg{background:#e8f5e9;color:var(--lime);}
+
+/* ── PRICING ── */
+.pricing-hero{background:linear-gradient(135deg,#ede7ff,#e3f2fd,#fce4ec);border-radius:20px;padding:40px;text-align:center;margin-bottom:28px;border:2px solid var(--border);}
+.pricing-hero h2{font-size:32px;font-weight:900;color:var(--ink);}
+.pricing-hero p{color:var(--slate);font-size:15px;margin-top:8px;}
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:12px;margin:20px 0 0;}
+.toggle-label{font-size:13px;font-weight:700;color:var(--slate);}
+.toggle-track{width:52px;height:28px;background:var(--violet);border-radius:20px;cursor:pointer;position:relative;transition:all .2s;}
+.toggle-knob{width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:all .2s;}
+.toggle-track.annual .toggle-knob{left:27px;}
+.save-pill{background:var(--lime);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-left:6px;}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-bottom:32px;}
+.plan-card{background:var(--card);border-radius:20px;border:2px solid var(--border);padding:28px 24px;text-align:center;transition:all .2s;box-shadow:var(--shadow);position:relative;}
+.plan-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-hover);}
+.plan-card.featured{border-color:var(--violet);border-width:3px;}
+.plan-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--violet);color:#fff;font-size:11px;font-weight:800;padding:5px 16px;border-radius:20px;white-space:nowrap;}
+.plan-icon{font-size:40px;margin-bottom:10px;}
+.plan-name{font-size:18px;font-weight:900;color:var(--ink);margin-bottom:6px;}
+.plan-desc{font-size:12px;color:var(--soft);margin-bottom:18px;min-height:36px;}
+.plan-price{font-size:38px;font-weight:900;color:var(--violet);line-height:1;}
+.plan-price sup{font-size:18px;vertical-align:top;margin-top:8px;display:inline-block;}
+.plan-price sub{font-size:13px;font-weight:600;color:var(--soft);}
+.plan-features{list-style:none;margin:18px 0;text-align:left;}
+.plan-features li{font-size:13px;padding:7px 0;border-bottom:1.5px solid var(--border);color:var(--slate);}
+.plan-features li:last-child{border:none;}
+.plan-features li::before{content:'✅ ';font-size:12px;}
+.plan-features li.no::before{content:'❌ ';}
+.plan-btn{width:100%;padding:13px;border-radius:14px;font-size:14px;font-weight:800;cursor:pointer;border:2px solid var(--violet);color:var(--violet);background:transparent;margin-top:8px;transition:all .2s;}
+.plan-btn:hover,.plan-card.featured .plan-btn{background:var(--violet);color:#fff;}
+.pxc-section{margin-bottom:32px;}
+.pxc-section h3{font-size:18px;font-weight:900;margin-bottom:16px;color:var(--ink);}
+.pxc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;}
+.pxc-card{background:var(--card);border-radius:16px;border:2px solid var(--border);padding:20px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);}
+.pxc-card:hover{border-color:var(--amber);transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,152,0,0.2);}
+.pxc-card.best{border-color:var(--amber);border-width:3px;position:relative;}
+.pxc-best-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--amber);color:#fff;font-size:10px;font-weight:800;padding:4px 12px;border-radius:20px;}
+.pxc-amount{font-size:22px;font-weight:900;color:var(--amber);}
+.pxc-bonus{font-size:11px;font-weight:700;color:var(--lime);margin:4px 0;}
+.pxc-price{font-size:16px;font-weight:800;color:var(--ink);margin:8px 0;}
+.pxc-buy{background:linear-gradient(135deg,var(--amber),var(--coral));color:#fff;border:none;padding:9px 20px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer;width:100%;}
+.pxc-buy:hover{opacity:.9;}
+.stripe-note{background:var(--sky);border:2px solid var(--border);border-radius:14px;padding:16px 20px;font-size:12px;color:var(--slate);display:flex;align-items:center;gap:12px;margin-top:8px;}
+
+/* ── OWNER DOT ── */
+#ownerDot{position:fixed;bottom:18px;left:18px;width:16px;height:16px;border-radius:50%;background:#7c3aed;opacity:0.45;cursor:pointer;z-index:99998;transition:opacity .2s;}
+#ownerDot:hover{opacity:1;}
+#ownerModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:99999;align-items:center;justify-content:center;}
+#ownerModal.open{display:flex;}
+.owner-box{background:#fff;border-radius:20px;padding:36px 32px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,0.25);text-align:center;}
+.owner-box h3{font-size:18px;font-weight:900;color:var(--ink);margin-bottom:6px;}
+.owner-box p{font-size:12px;color:var(--soft);margin-bottom:20px;}
+.owner-inp{width:100%;background:var(--sky);border:2px solid var(--border);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--ink);outline:none;margin-bottom:14px;text-align:center;}
+.owner-inp:focus{border-color:var(--violet);}
+.owner-btn{width:100%;padding:13px;background:var(--violet);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:8px;}
+.owner-cancel{font-size:12px;color:var(--soft);cursor:pointer;}
+.owner-panel{background:linear-gradient(135deg,#ede7ff,#e3f2fd);border-radius:16px;padding:20px;margin-top:16px;text-align:left;}
+.owner-panel h4{font-size:14px;font-weight:900;color:var(--violet);margin-bottom:12px;}
+.owner-stat{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1.5px solid var(--border);color:var(--slate);}
+.owner-stat:last-child{border:none;}
+.owner-stat b{color:var(--ink);}
+.owner-action{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.oact-btn{flex:1;padding:9px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid var(--border);background:var(--card);color:var(--slate);transition:all .15s;}
+.oact-btn:hover{background:var(--violet);color:#fff;border-color:var(--violet);}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:28px;right:28px;background:var(--violet);color:#fff;padding:12px 22px;border-radius:14px;font-size:13px;font-weight:800;z-index:9999;opacity:0;transform:translateY(16px);transition:all .28s;pointer-events:none;box-shadow:0 4px 20px rgba(124,92,252,0.3);}
+#toast.show{opacity:1;transform:translateY(0);}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--sky);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+@media(max-width:720px){
+  .avatar-layout,.social-layout,.studio-wrap{grid-template-columns:1fr;}
+  .hero h1{font-size:28px;}
+  .game-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));}
+  .nav-tab{padding:6px 10px;font-size:12px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo" onclick="switchScreen('home')">
+    <span class="px">PIX</span><span class="el">EL</span><span class="or">OR</span><span class="ia">IA</span>
+  </div>
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="switchScreen('home',this)">🏠 Home</div>
+    <div class="nav-tab" onclick="switchScreen('game',this)">🎮 Play</div>
+    <div class="nav-tab" onclick="switchScreen('avatar',this)">🧬 Avatar</div>
+    <div class="nav-tab" onclick="switchScreen('marketplace',this)">🛒 Market</div>
+    <div class="nav-tab" onclick="switchScreen('social',this)">💬 Social</div>
+    <div class="nav-tab" onclick="switchScreen('studio',this)">🔧 Studio</div>
+    <div class="nav-tab" onclick="switchScreen('ai',this)">🤖 AI Guide</div>
+    <div class="nav-tab" onclick="switchScreen('pricing',this)">💳 Pricing</div>
+    <div class="nav-tab" onclick="switchScreen('legal',this)">⚖️ Legal</div>
+  </div>
+  <div class="topbar-right">
+    <div class="pxc-pill" id="pxcBadge">🌟 5,240 PXC</div>
+    <div class="user-av">🦸</div>
+  </div>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <div class="hero-bubbles">🏰🚀🌊⚔️🧩🏎️🌋👻🐉🌌🎭🤖</div>
+    <h1>Create. Play.<br/><em>Explore Anything.</em></h1>
+    <p>PIXELORIA is the open creative gaming universe where millions of players build worlds, design characters, compete, and earn rewards together.</p>
+    <div class="hero-btns">
+      <button class="btn btn-violet" onclick="switchScreen('game',document.querySelectorAll('.nav-tab')[1])">🎮 Play Now</button>
+      <button class="btn btn-coral" onclick="switchScreen('studio',document.querySelectorAll('.nav-tab')[5])">🔧 Create a World</button>
+      <button class="btn btn-outline" onclick="switchScreen('avatar',document.querySelectorAll('.nav-tab')[2])">🧬 Build Avatar</button>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-val" style="color:var(--violet)">52.4M</div><div class="stat-lbl">Registered Players</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--coral)">3.1M+</div><div class="stat-lbl">Worlds Created</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--amber)">🌟 9.7B</div><div class="stat-lbl">PXC in Economy</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--lime)">214K</div><div class="stat-lbl">Online Right Now</div></div>
+    <div class="stat-card"><div class="stat-val" style="color:var(--teal)">188</div><div class="stat-lbl">Countries</div></div>
+  </div>
+  <div class="cats" id="catRow">
+    <div class="cat active">🌟 All</div>
+    <div class="cat">⚔️ Battle</div>
+    <div class="cat">🏗️ Build</div>
+    <div class="cat">🏎️ Racing</div>
+    <div class="cat">🧩 Puzzle</div>
+    <div class="cat">🌊 Adventure</div>
+    <div class="cat">🏠 Social</div>
+    <div class="cat">👻 Horror</div>
+    <div class="cat">🚀 Sci-Fi</div>
+    <div class="cat">🐉 Fantasy</div>
+  </div>
+  <div class="section-hdr"><h2>🔥 Trending Now</h2><span class="see-all" onclick="toast('Loading all games...')">See All →</span></div>
+  <div class="game-grid" id="gameGrid"></div>
+  <div class="section-hdr"><h2>⭐ Staff Picks</h2><span class="see-all" onclick="toast('Loading staff picks...')">See All →</span></div>
+  <div class="game-grid" id="staffGrid"></div>
+</div>
+
+<!-- ══════════ PLAY GAME ══════════ -->
+<div class="screen" id="screen-game">
+  <h2 style="font-size:22px;font-weight:900;margin-bottom:18px;color:var(--ink);">🎮 PixelJump Adventure</h2>
+  <div class="game-area-wrap">
+    <div class="game-toolbar">
+      <span class="game-toolbar-title">PixelJump Adventure — World 1</span>
+      <span class="game-stat-pill">❤️ <span id="lives">3</span> Lives</span>
+      <span class="game-stat-pill">⏱️ <span id="timer">60</span>s</span>
+      <span class="game-stat-pill">🏅 Level <span id="level">1</span></span>
+    </div>
+    <div class="game-canvas-wrap">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+    <div class="game-controls">
+      <button class="ctrl-btn active" onclick="startGame()">▶ Start</button>
+      <button class="ctrl-btn" onclick="pauseGame()">⏸ Pause</button>
+      <button class="ctrl-btn red" onclick="resetGame()">↺ Reset</button>
+      <span style="font-size:12px;color:var(--soft);font-weight:600;">Arrow Keys / WASD to move · Space to jump</span>
+      <div class="score-display">🌟 Score: <span id="score">0</span></div>
+    </div>
+  </div>
+  <div style="margin-top:16px;background:var(--card);border-radius:16px;border:2px solid var(--border);padding:18px;box-shadow:var(--shadow);">
+    <div style="font-size:14px;font-weight:900;margin-bottom:8px;">🕹️ How to Play</div>
+    <div style="font-size:13px;color:var(--slate);line-height:1.7;">
+      Move your hero with <b>Arrow Keys</b> or <b>WASD</b>. Press <b>Space</b> or <b>↑</b> to jump. Collect ⭐ stars to earn PXC. Avoid 👾 enemies. Reach the 🏁 flag to complete the level. You have 3 lives — don't fall off the platforms!
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AVATAR ══════════ -->
+<div class="screen" id="screen-avatar">
+  <h2 style="font-size:22px;font-weight:900;margin-bottom:20px;color:var(--ink);">🧬 Avatar Creator</h2>
+  <div class="avatar-layout">
+    <div>
+      <div class="avatar-preview">
+        <div class="px-char">
+          <div class="px-head" id="avHead">🦸</div>
+          <div style="display:flex;justify-content:space-between;margin:0 -10px;">
+            <div class="px-arm" id="avArmL"></div>
+            <div class="px-body" id="avBody"></div>
+            <div class="px-arm" id="avArmR"></div>
+          </div>
+          <div class="px-legs" style="margin-top:4px;">
+            <div class="px-leg" id="avLegL"></div>
+            <div class="px-leg" id="avLegR"></div>
+          </div>
+        </div>
+        <div class="av-name" id="avDisplayName">PixelHero_Manas</div>
+        <div class="av-level">⚡ Level 42 · PIXELORIA Champion</div>
+        <div style="display:flex;gap:10px;margin-top:18px;">
+          <button class="btn btn-violet" style="font-size:12px;padding:9px 18px;" onclick="saveAvatar()">💾 Save</button>
+          <button class="btn btn-outline" style="font-size:12px;padding:9px 18px;" onclick="randomAvatar()">🎲 Random</button>
+        </div>
+      </div>
+    </div>
+    <div class="avatar-options">
+      <div class="opt-sec">
+        <div class="opt-lbl">Hero Name</div>
+        <input class="av-input" id="avNameInp" value="PixelHero_Manas" oninput="document.getElementById('avDisplayName').textContent=this.value||'Hero'"/>
+      </div>
+      <div class="opt-sec">
+        <div class="opt-lbl">Character Face</div>
+        <div class="opt-row" id="charFaces"></div>
+      </div>
+      <div class="opt-sec">
+        <div class="opt-lbl">Body Colour</div>
+        <div class="opt-row" id="bodySwatches"></div>
+      </div>
+      <div class="opt-sec">
+        <div class="opt-lbl">Outfit</div>
+        <div class="opt-row" id="outfits"></div>
+      </div>
+      <div class="opt-sec">
+        <div class="opt-lbl">Leg Colour</div>
+        <div class="opt-row" id="legSwatches"></div>
+      </div>
+      <div class="opt-sec">
+        <div class="opt-lbl">Special Accessory</div>
+        <div class="opt-row" id="accessories"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MARKETPLACE ══════════ -->
+<div class="screen" id="screen-marketplace">
+  <h2 style="font-size:22px;font-weight:900;margin-bottom:18px;color:var(--ink);">🛒 PIXELORIA Market</h2>
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+    <div class="mkt-tabs">
+      <div class="mkt-tab active" onclick="setMktTab(this,'all')">All</div>
+      <div class="mkt-tab" onclick="setMktTab(this,'weapon')">⚔️ Weapons</div>
+      <div class="mkt-tab" onclick="setMktTab(this,'avatar')">🧬 Skins</div>
+      <div class="mkt-tab" onclick="setMktTab(this,'vehicle')">🚗 Vehicles</div>
+      <div class="mkt-tab" onclick="setMktTab(this,'home')">🏠 Homes</div>
+      <div class="mkt-tab" onclick="setMktTab(this,'pet')">🐾 Pets</div>
+    </div>
+    <div class="pxc-pill" id="mktPxc">🌟 5,240 PXC</div>
+  </div>
+  <div class="mkt-grid" id="mktGrid"></div>
+</div>
+
+<!-- ══════════ SOCIAL ══════════ -->
+<div class="screen" id="screen-social">
+  <h2 style="font-size:22px;font-weight:900;margin-bottom:20px;color:var(--ink);">💬 Social Hub</h2>
+  <div class="social-layout">
+    <div>
+      <div class="friends-panel">
+        <div class="friends-hdr">Friends <span class="add-btn" onclick="toast('🔍 Friend search opening...')">+ Add Friend</span></div>
+        <div id="friendsList"></div>
+      </div>
+    </div>
+    <div class="chat-wrap">
+      <div class="chat-title">🌐 PIXELORIA Global Chat</div>
+      <div class="chat-messages" id="chatMsgs"></div>
+      <div class="chat-irow">
+        <input class="chat-inp" id="chatInp" placeholder="Chat with the world..." onkeydown="if(event.key==='Enter')sendChat()"/>
+        <button class="send-btn" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ STUDIO ══════════ -->
+<div class="screen" id="screen-studio">
+  <h2 style="font-size:22px;font-weight:900;margin-bottom:18px;color:var(--ink);">🔧 World Studio</h2>
+  <div class="studio-wrap">
+    <div class="studio-side">
+      <div class="st-sec">
+        <div class="st-sec-title">Terrain</div>
+        <div class="st-item active" onclick="setTool(this,'grass','🌱')">🌱 Grass</div>
+        <div class="st-item" onclick="setTool(this,'water','🌊')">🌊 Water</div>
+        <div class="st-item" onclick="setTool(this,'rock','🪨')">🪨 Rock</div>
+        <div class="st-item" onclick="setTool(this,'sand','🏖️')">🏖️ Sand</div>
+        <div class="st-item" onclick="setTool(this,'snow','❄️')">❄️ Snow</div>
+        <div class="st-item" onclick="setTool(this,'lava','🔥')">🔥 Lava</div>
+      </div>
+      <div class="st-sec">
+        <div class="st-sec-title">Objects</div>
+        <div class="st-item" onclick="setTool(this,'tree','🌲')">🌲 Tree</div>
+        <div class="st-item" onclick="setTool(this,'house','🏠')">🏠 House</div>
+        <div class="st-item" onclick="setTool(this,'chest','📦')">📦 Chest</div>
+        <div class="st-item" onclick="setTool(this,'portal','🌀')">🌀 Portal</div>
+        <div class="st-item" onclick="setTool(this,'star','⭐')">⭐ Star</div>
+      </div>
+      <div class="st-sec">
+        <div class="st-sec-title">Characters</div>
+        <div class="st-item" onclick="setTool(this,'npc','🤖')">🤖 NPC</div>
+        <div class="st-item" onclick="setTool(this,'enemy','👾')">👾 Enemy</div>
+        <div class="st-item" onclick="setTool(this,'boss','🐉')">🐉 Boss</div>
+      </div>
+      <div class="st-sec">
+        <div class="st-sec-title">Tools</div>
+        <div class="st-item" onclick="setTool(this,'erase','❌')">❌ Erase</div>
+        <div class="st-item" onclick="clearStudio()">🗑️ Clear All</div>
+        <div class="st-item" onclick="publishWorld()">🚀 Publish</div>
+      </div>
+    </div>
+    <div class="studio-canvas">
+      <div class="st-grid-bg"></div>
+      <div class="st-world" id="stWorld"></div>
+      <div class="st-tool-lbl">Placing: <span id="toolLbl">🌱 Grass</span></div>
+    </div>
+    <div class="st-props">
+      <div style="font-size:13px;font-weight:900;margin-bottom:14px;color:var(--ink);">⚙️ World Settings</div>
+      <div class="prop-lbl">World Name</div>
+      <input class="prop-inp" id="worldName" value="My Pixeloria World"/>
+      <div class="prop-lbl">Game Mode</div>
+      <select class="prop-inp" style="cursor:pointer;">
+        <option>🤝 Co-op</option><option>⚔️ PvP</option><option>🏎️ Race</option><option>🧩 Puzzle</option><option>🏠 Social</option>
+      </select>
+      <div class="prop-lbl">Max Players</div>
+      <input class="prop-inp" type="number" value="16" min="1" max="100"/>
+      <div class="prop-lbl">Time of Day</div>
+      <select class="prop-inp" style="cursor:pointer;">
+        <option>☀️ Day</option><option>🌅 Sunset</option><option>🌙 Night</option><option>⏱️ Cycle</option>
+      </select>
+      <div class="prop-lbl">Entry Fee (PXC)</div>
+      <input class="prop-inp" type="number" value="0" min="0"/>
+      <div class="prop-lbl">Gravity</div>
+      <input class="prop-inp" type="range" min="0" max="200" value="100" style="padding:5px;"/>
+      <button class="btn btn-violet" style="width:100%;font-size:13px;margin-top:10px;" onclick="publishWorld()">🚀 Publish World</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ AI GUIDE ══════════ -->
+<div class="screen" id="screen-ai">
+  <div class="ai-wrap">
+    <div class="ai-hdr">
+      <div style="font-size:44px;margin-bottom:8px;">🤖</div>
+      <h2>PIXEL — Your AI Game Guide</h2>
+      <p>PIXEL is your intelligent companion for designing quests, creating lore, inventing characters and building amazing worlds.</p>
+    </div>
+    <div class="ai-presets">
+      <div class="preset" onclick="askAI(this.textContent)">🗡️ Design me a quest</div>
+      <div class="preset" onclick="askAI(this.textContent)">🌍 Create world lore</div>
+      <div class="preset" onclick="askAI(this.textContent)">🐉 Describe my boss</div>
+      <div class="preset" onclick="askAI(this.textContent)">🏰 Castle design ideas</div>
+      <div class="preset" onclick="askAI(this.textContent)">⚔️ Invent weapons</div>
+      <div class="preset" onclick="askAI(this.textContent)">📜 Write game backstory</div>
+      <div class="preset" onclick="askAI(this.textContent)">🧩 Suggest a puzzle mechanic</div>
+    </div>
+    <div class="ai-box">
+      <div class="ai-msgs" id="aiMsgs">
+        <div class="ai-msg">
+          <div class="ai-icon">🤖</div>
+          <div class="ai-text"><b>PIXEL AI</b><br/>Hi! I'm PIXEL — your PIXELORIA creative companion. I can help you design quests, write lore, create characters, invent weapons, build puzzles and craft entire worlds. What shall we create together?</div>
+        </div>
+      </div>
+      <div class="ai-foot">
+        <input class="ai-inp" id="aiInp" placeholder="Ask PIXEL anything about your world..." onkeydown="if(event.key==='Enter')sendAI()"/>
+        <button class="ai-send" onclick="sendAI()">Ask PIXEL ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ LEGAL ══════════ -->
+<div class="screen" id="screen-legal">
+  <div class="legal-wrap">
+    <h2 style="font-size:22px;font-weight:900;margin-bottom:6px;color:var(--ink);">⚖️ Legal &amp; Compliance Centre</h2>
+    <p style="font-size:13px;color:var(--soft);margin-bottom:22px;">All documents governing your use of PIXELORIA. Please read carefully.</p>
+    <div class="legal-tabs">
+      <div class="legal-tab active" onclick="setLegal(this,'tos')">📋 Terms of Service</div>
+      <div class="legal-tab" onclick="setLegal(this,'privacy')">🔒 Privacy Policy</div>
+      <div class="legal-tab" onclick="setLegal(this,'copyright')">©️ Copyright Policy</div>
+      <div class="legal-tab" onclick="setLegal(this,'disclaimer')">⚠️ Disclaimer</div>
+      <div class="legal-tab" onclick="setLegal(this,'eula')">📄 EULA</div>
+    </div>
+
+    <!-- TERMS OF SERVICE -->
+    <div class="legal-doc active" id="legal-tos">
+      <h1>Terms of Service</h1>
+      <div class="eff">Effective Date: 8 August 2026 &nbsp;|&nbsp; Version 1.0</div>
+      <div class="notice-box">⚠️ IMPORTANT: By accessing or using PIXELORIA, you agree to be legally bound by these Terms of Service. If you do not agree, you must not use the platform.</div>
+      <div class="badge-row">
+        <span class="legal-badge lb-age">Age 7+ Required</span>
+        <span class="legal-badge lb-reg">Australian Law Governed</span>
+        <span class="legal-badge lb-trade">Registered Trademarks Protected</span>
+      </div>
+      <h2>1. About PIXELORIA</h2>
+      <p>PIXELORIA ("the Platform", "we", "us", "our") is an online gaming and creative platform operated by <b>Aussi-Nexus Group</b> (ABN 76 947 108 181), registered in Queensland, Australia. PIXELORIA allows users to create, share, and play user-generated games and experiences.</p>
+      <h2>2. Eligibility</h2>
+      <ul>
+        <li>You must be at least 7 years of age to use PIXELORIA.</li>
+        <li>Users under 13 years must have verifiable parental/guardian consent.</li>
+        <li>Users under 18 years are subject to additional parental controls.</li>
+        <li>By registering, you confirm you meet these requirements.</li>
+      </ul>
+      <h2>3. Account Responsibilities</h2>
+      <ul>
+        <li>You are solely responsible for maintaining the confidentiality of your account credentials.</li>
+        <li>You must not share your account with others or create accounts on behalf of third parties without consent.</li>
+        <li>You are responsible for all activities that occur under your account.</li>
+        <li>Impersonating another user or PIXELORIA staff is strictly prohibited.</li>
+      </ul>
+      <h2>4. User-Generated Content (UGC)</h2>
+      <ul>
+        <li>You retain intellectual property ownership of original content you create on PIXELORIA.</li>
+        <li>By publishing content, you grant PIXELORIA a worldwide, royalty-free, non-exclusive licence to host, display, reproduce, and distribute your content on the platform.</li>
+        <li>You must not upload content that infringes any third party's intellectual property rights.</li>
+        <li>We reserve the right to remove any content at our sole discretion without notice.</li>
+      </ul>
+      <h2>5. Virtual Currency — PIXELORIA Credits (PXC)</h2>
+      <ul>
+        <li>PXC is a virtual in-platform currency with no monetary value outside the Platform.</li>
+        <li>PXC cannot be transferred, sold, or exchanged for real money except through official developer exchange programmes where applicable.</li>
+        <li>All PXC purchases are final and non-refundable unless required by applicable Australian Consumer Law.</li>
+        <li>PIXELORIA reserves the right to modify, suspend, or discontinue PXC at any time.</li>
+      </ul>
+      <h2>6. Prohibited Conduct</h2>
+      <p>You must not:</p>
+      <ul>
+        <li>Harass, bully, threaten, or harm other users;</li>
+        <li>Upload malicious code, exploit vulnerabilities, or attempt to hack the platform;</li>
+        <li>Use bots, scripts, or automation to gain unfair advantage;</li>
+        <li>Upload content that is sexually explicit, violent, hateful, or illegal;</li>
+        <li>Attempt to circumvent safety features or moderation systems;</li>
+        <li>Engage in real-money trading of in-game items outside official channels.</li>
+      </ul>
+      <h2>7. Termination</h2>
+      <p>PIXELORIA may suspend or permanently terminate your account for any breach of these Terms, with or without prior notice. Upon termination, your access to content, PXC balances, and purchased items may be forfeited.</p>
+      <h2>8. Governing Law</h2>
+      <p>These Terms are governed by the laws of Queensland, Australia. Any disputes shall be subject to the exclusive jurisdiction of the courts of Queensland, Australia.</p>
+      <h2>9. Contact</h2>
+      <p>Aussi-Nexus Group &nbsp;|&nbsp; ABN 76 947 108 181 &nbsp;|&nbsp; Shailer Park, QLD, Australia &nbsp;|&nbsp; legal@pixeloria.com</p>
+    </div>
+
+    <!-- PRIVACY POLICY -->
+    <div class="legal-doc" id="legal-privacy">
+      <h1>Privacy Policy</h1>
+      <div class="eff">Effective Date: 8 August 2026 &nbsp;|&nbsp; Compliant with Australian Privacy Act 1988</div>
+      <div class="notice-box">🔒 PIXELORIA is committed to protecting your personal information in accordance with the Australian Privacy Principles (APPs) under the Privacy Act 1988 (Cth).</div>
+      <h2>1. Information We Collect</h2>
+      <ul>
+        <li><b>Account data:</b> Username, email address, date of birth, password (hashed).</li>
+        <li><b>Usage data:</b> Games played, session duration, in-game activity, IP address, device type.</li>
+        <li><b>Payment data:</b> Processed via Stripe; we do not store full card numbers.</li>
+        <li><b>Communications:</b> Chat messages, support tickets, feedback.</li>
+        <li><b>User-generated content:</b> Worlds, avatars, and items you create.</li>
+      </ul>
+      <h2>2. How We Use Your Information</h2>
+      <ul>
+        <li>To operate and improve the PIXELORIA platform;</li>
+        <li>To process transactions and manage your PXC balance;</li>
+        <li>To enforce our Terms of Service and Community Guidelines;</li>
+        <li>To personalise your experience and recommend content;</li>
+        <li>To send service notifications (not marketing without consent);</li>
+        <li>To comply with legal obligations.</li>
+      </ul>
+      <h2>3. Children's Privacy (Under 13)</h2>
+      <p>We take special measures to protect users under 13. We collect minimal data from children, require parental consent for account creation, disable direct messaging by default, and apply strict content filters. Parents may contact us to review or delete their child's data.</p>
+      <h2>4. Data Sharing</h2>
+      <p>We do not sell your personal data. We may share data with: payment processors (Stripe), cloud infrastructure providers, and law enforcement when legally required.</p>
+      <h2>5. Your Rights</h2>
+      <ul>
+        <li>Access the personal information we hold about you;</li>
+        <li>Request correction of inaccurate data;</li>
+        <li>Request deletion of your account and associated data;</li>
+        <li>Lodge a complaint with the Office of the Australian Information Commissioner (OAIC).</li>
+      </ul>
+      <h2>6. Data Retention</h2>
+      <p>Account data is retained for the duration of your account plus 7 years for financial records as required by Australian law. Deleted accounts are purged within 90 days.</p>
+      <h2>7. Contact</h2>
+      <p>Privacy Officer &nbsp;|&nbsp; Aussi-Nexus Group &nbsp;|&nbsp; privacy@pixeloria.com</p>
+    </div>
+
+    <!-- COPYRIGHT POLICY -->
+    <div class="legal-doc" id="legal-copyright">
+      <h1>Copyright &amp; Intellectual Property Policy</h1>
+      <div class="eff">Effective Date: 8 August 2026</div>
+      <div class="badge-row">
+        <span class="legal-badge lb-copy">© Copyright Protected</span>
+        <span class="legal-badge lb-trade">™ Trademarks Registered</span>
+        <span class="legal-badge lb-reg">Australian Copyright Act 1968</span>
+      </div>
+      <div class="notice-box">© 2026 Aussi-Nexus Group (ABN 76 947 108 181). All rights reserved. PIXELORIA™ is an original work. Unauthorised reproduction, distribution, or commercial use of any part of this platform is strictly prohibited and may constitute a criminal offence under the Copyright Act 1968 (Cth).</div>
+      <h2>1. Platform Ownership</h2>
+      <p>The name <b>PIXELORIA™</b>, logo, mascots, user interface design, game engine code, PXC currency system, and all original platform content are the exclusive intellectual property of <b>Aussi-Nexus Group</b>. These are protected under:</p>
+      <ul>
+        <li>Copyright Act 1968 (Commonwealth of Australia)</li>
+        <li>Trade Marks Act 1995 (Commonwealth of Australia)</li>
+        <li>International copyright treaties including the Berne Convention</li>
+      </ul>
+      <h2>2. What You May NOT Do</h2>
+      <ul>
+        <li>Copy, reproduce, or redistribute PIXELORIA's code, design, or branding;</li>
+        <li>Create derivative works based on PIXELORIA without written permission;</li>
+        <li>Use the PIXELORIA name, logo, or any confusingly similar mark commercially;</li>
+        <li>Reverse-engineer or decompile any part of the platform software;</li>
+        <li>Upload or publish content that infringes any third party's copyright.</li>
+      </ul>
+      <h2>3. User Content Ownership</h2>
+      <p>You retain copyright in original worlds, characters, and content you create. By publishing to PIXELORIA, you grant us the licence described in our Terms of Service. You warrant that your content does not infringe any third party rights.</p>
+      <h2>4. DMCA / Take-Down Procedure</h2>
+      <p>If you believe your copyrighted work has been infringed on PIXELORIA, submit a takedown notice to <b>copyright@pixeloria.com</b> including:</p>
+      <ul>
+        <li>Description of the copyrighted work claimed to be infringed;</li>
+        <li>URL or location of the infringing material on our platform;</li>
+        <li>Your contact details and a signed declaration of good faith.</li>
+      </ul>
+      <p>We will respond within 14 business days and remove confirmed infringing content.</p>
+      <h2>5. Third-Party Content</h2>
+      <p>PIXELORIA uses certain open-source libraries under their respective licences (MIT, Apache 2.0). These do not affect user rights. Full attribution is available at legal@pixeloria.com.</p>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="legal-doc" id="legal-disclaimer">
+      <h1>Legal Disclaimer</h1>
+      <div class="eff">Effective Date: 8 August 2026</div>
+      <div class="notice-box">⚠️ Please read this disclaimer carefully. It limits PIXELORIA's liability and sets out important conditions of use.</div>
+      <h2>1. Platform Provided "As Is"</h2>
+      <p>PIXELORIA is provided on an "as is" and "as available" basis without warranties of any kind, express or implied. We do not warrant that the platform will be uninterrupted, error-free, or free of viruses or other harmful components.</p>
+      <h2>2. Limitation of Liability</h2>
+      <p>To the maximum extent permitted by Australian Consumer Law, Aussi-Nexus Group shall not be liable for:</p>
+      <ul>
+        <li>Loss of data, virtual items, or PXC credits due to technical failures;</li>
+        <li>Indirect, incidental, special, or consequential damages;</li>
+        <li>Actions or conduct of other users on the platform;</li>
+        <li>Third-party content accessible through the platform;</li>
+        <li>Temporary or permanent unavailability of services.</li>
+      </ul>
+      <h2>3. Australian Consumer Law</h2>
+      <p>Nothing in this Disclaimer excludes, restricts, or modifies rights you may have under the Australian Consumer Law (Competition and Consumer Act 2010) that cannot be excluded by contract, including statutory guarantees for consumer services.</p>
+      <h2>4. User-Generated Content</h2>
+      <p>PIXELORIA is not responsible for the accuracy, safety, or legality of user-generated content. We moderate content to the best of our ability but cannot guarantee that all content complies with our policies at all times.</p>
+      <h2>5. Virtual Economy</h2>
+      <p>PXC (PIXELORIA Credits) are a virtual currency with no guaranteed monetary value. PIXELORIA reserves the right to modify, reset, or discontinue the virtual economy at any time. We are not liable for any perceived financial loss resulting from changes to the virtual economy.</p>
+      <h2>6. External Links</h2>
+      <p>The Platform may contain links to third-party websites. PIXELORIA is not responsible for the content or privacy practices of those sites.</p>
+    </div>
+
+    <!-- EULA -->
+    <div class="legal-doc" id="legal-eula">
+      <h1>End User Licence Agreement (EULA)</h1>
+      <div class="eff">Effective Date: 8 August 2026 &nbsp;|&nbsp; Aussi-Nexus Group &nbsp;|&nbsp; ABN 76 947 108 181</div>
+      <div class="notice-box">📄 This EULA is a legally binding agreement between you ("User") and Aussi-Nexus Group ("Licensor") regarding your use of the PIXELORIA platform software and services.</div>
+      <h2>1. Grant of Licence</h2>
+      <p>Subject to your compliance with this EULA, PIXELORIA grants you a limited, non-exclusive, non-transferable, revocable licence to access and use the Platform solely for personal, non-commercial entertainment purposes.</p>
+      <h2>2. Restrictions</h2>
+      <p>You must not:</p>
+      <ul>
+        <li>Sublicence, sell, resell, transfer, or commercially exploit the software;</li>
+        <li>Modify, adapt, translate, or create derivative works of the platform;</li>
+        <li>Use the platform for any unlawful purpose;</li>
+        <li>Attempt to gain unauthorised access to any part of the platform;</li>
+        <li>Use cheats, exploits, automation, or third-party software to modify gameplay.</li>
+      </ul>
+      <h2>3. Intellectual Property</h2>
+      <p>All intellectual property in the PIXELORIA platform, including software, graphics, game mechanics, and documentation, remains the exclusive property of Aussi-Nexus Group. This EULA does not transfer any ownership rights to you.</p>
+      <h2>4. Updates and Changes</h2>
+      <p>PIXELORIA may update the platform software at any time. Updates may change features, remove content, or alter gameplay. Continued use of the platform after updates constitutes acceptance of the modified platform.</p>
+      <h2>5. Termination</h2>
+      <p>This licence is effective until terminated. PIXELORIA may terminate it immediately if you breach any provision of this EULA. Upon termination, you must cease all use of the platform.</p>
+      <h2>6. Governing Law</h2>
+      <p>This EULA is governed by Queensland, Australia law. Any dispute shall be resolved in the courts of Queensland, Australia.</p>
+      <h2>7. Acknowledgement</h2>
+      <p>By using PIXELORIA, you acknowledge that you have read, understood, and agree to be bound by this EULA, our Terms of Service, Privacy Policy, Copyright Policy, and Disclaimer.</p>
+      <p style="margin-top:16px;"><b>Aussi-Nexus Group</b> &nbsp;|&nbsp; ABN 76 947 108 181 &nbsp;|&nbsp; Shailer Park, QLD, Australia &nbsp;|&nbsp; legal@pixeloria.com</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PRICING ══════════ -->
+<div class="screen" id="screen-pricing">
+  <div class="pricing-hero">
+    <h2>💳 Choose Your PIXELORIA Plan</h2>
+    <p>Unlock more worlds, earn more PXC, and play without limits.</p>
+    <div class="billing-toggle">
+      <span class="toggle-label">Monthly</span>
+      <div class="toggle-track" id="billingToggle" onclick="toggleBilling()"><div class="toggle-knob"></div></div>
+      <span class="toggle-label">Annual <span class="save-pill">Save 20%</span></span>
+    </div>
+  </div>
+
+  <!-- MEMBERSHIP PLANS -->
+  <div class="plans-grid">
+    <!-- FREE -->
+    <div class="plan-card">
+      <div class="plan-icon">🌱</div>
+      <div class="plan-name">Explorer</div>
+      <div class="plan-desc">Perfect for new players getting started in PIXELORIA.</div>
+      <div class="plan-price"><sup>A$</sup>0<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>Access to all free games</li>
+        <li>1 avatar slot</li>
+        <li>Basic world studio (24 tiles)</li>
+        <li>Global chat access</li>
+        <li>500 PXC welcome bonus</li>
+        <li class="no">No ads removal</li>
+        <li class="no">No premium worlds</li>
+        <li class="no">No developer tools</li>
+      </ul>
+      <button class="plan-btn" onclick="toast('✅ You are on Explorer — free forever!')">Current Plan</button>
+    </div>
+    <!-- STARTER -->
+    <div class="plan-card">
+      <div class="plan-icon">⚡</div>
+      <div class="plan-name">Adventurer</div>
+      <div class="plan-desc">For active players who want more freedom and rewards.</div>
+      <div class="plan-price" id="price-adventurer"><sup>A$</sup>6.99<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>All Explorer features</li>
+        <li>Ad-free experience</li>
+        <li>3 avatar slots</li>
+        <li>2,000 PXC/month bonus</li>
+        <li>Exclusive Adventurer badge</li>
+        <li>Access to premium worlds</li>
+        <li>Extended studio (96 tiles)</li>
+        <li class="no">No developer revenue share</li>
+      </ul>
+      <button class="plan-btn" onclick="selectPlan('Adventurer')">Get Adventurer</button>
+    </div>
+    <!-- PRO — FEATURED -->
+    <div class="plan-card featured">
+      <div class="plan-badge">⭐ Most Popular</div>
+      <div class="plan-icon">🏆</div>
+      <div class="plan-name">Champion</div>
+      <div class="plan-desc">The full PIXELORIA experience for serious creators and players.</div>
+      <div class="plan-price" id="price-champion"><sup>A$</sup>14.99<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>All Adventurer features</li>
+        <li>10 avatar slots</li>
+        <li>5,000 PXC/month bonus</li>
+        <li>Champion crown + badge</li>
+        <li>Publish unlimited worlds</li>
+        <li>Full studio (unlimited tiles)</li>
+        <li>10% developer revenue share</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="plan-btn" onclick="selectPlan('Champion')">Get Champion</button>
+    </div>
+    <!-- STUDIO -->
+    <div class="plan-card">
+      <div class="plan-icon">🏗️</div>
+      <div class="plan-name">Creator Studio</div>
+      <div class="plan-desc">For professional world builders and game developers.</div>
+      <div class="plan-price" id="price-studio"><sup>A$</sup>29.99<sub>/mo</sub></div>
+      <ul class="plan-features">
+        <li>All Champion features</li>
+        <li>Unlimited avatar slots</li>
+        <li>12,000 PXC/month bonus</li>
+        <li>Studio Pro badge + tools</li>
+        <li>25% developer revenue share</li>
+        <li>Analytics dashboard</li>
+        <li>API access for game scripting</li>
+        <li>Dedicated account manager</li>
+      </ul>
+      <button class="plan-btn" onclick="selectPlan('Creator Studio')">Get Creator Studio</button>
+    </div>
+  </div>
+
+  <!-- PXC TOP-UP -->
+  <div class="pxc-section">
+    <h3>🌟 Top Up PIXELORIA Credits (PXC)</h3>
+    <div class="pxc-grid">
+      <div class="pxc-card" onclick="buyPxc(500,2.99)">
+        <div class="pxc-amount">⭐ 500</div>
+        <div class="pxc-bonus">Starter Pack</div>
+        <div class="pxc-price">A$2.99</div>
+        <button class="pxc-buy">Buy Now</button>
+      </div>
+      <div class="pxc-card" onclick="buyPxc(1200,5.99)">
+        <div class="pxc-amount">⭐ 1,200</div>
+        <div class="pxc-bonus">+200 Bonus</div>
+        <div class="pxc-price">A$5.99</div>
+        <button class="pxc-buy">Buy Now</button>
+      </div>
+      <div class="pxc-card best" onclick="buyPxc(3000,12.99)">
+        <div class="pxc-best-badge">🔥 Best Value</div>
+        <div class="pxc-amount">⭐ 3,000</div>
+        <div class="pxc-bonus">+800 Bonus</div>
+        <div class="pxc-price">A$12.99</div>
+        <button class="pxc-buy">Buy Now</button>
+      </div>
+      <div class="pxc-card" onclick="buyPxc(6500,24.99)">
+        <div class="pxc-amount">⭐ 6,500</div>
+        <div class="pxc-bonus">+2,000 Bonus</div>
+        <div class="pxc-price">A$24.99</div>
+        <button class="pxc-buy">Buy Now</button>
+      </div>
+      <div class="pxc-card" onclick="buyPxc(15000,49.99)">
+        <div class="pxc-amount">⭐ 15,000</div>
+        <div class="pxc-bonus">+6,000 Bonus</div>
+        <div class="pxc-price">A$49.99</div>
+        <button class="pxc-buy">Buy Now</button>
+      </div>
+      <div class="pxc-card" onclick="buyPxc(40000,99.99)">
+        <div class="pxc-amount">⭐ 40,000</div>
+        <div class="pxc-bonus">+20,000 Mega Bonus</div>
+        <div class="pxc-price">A$99.99</div>
+        <button class="pxc-buy">Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stripe-note">
+    <span style="font-size:28px;">🔒</span>
+    <div>
+      <b>Secure Payments via Stripe</b><br/>
+      All transactions are processed securely by Stripe. PIXELORIA never stores your card details. Prices in AUD. GST included where applicable. Subscriptions auto-renew — cancel anytime from your account settings.<br/>
+      <span style="color:var(--soft);">Aussi-Nexus Group &nbsp;|&nbsp; ABN 76 947 108 181 &nbsp;|&nbsp; Queensland, Australia</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ OWNER DOT ══════════ -->
+<div id="ownerDot" title="Owner Access" onclick="openOwnerModal()"></div>
+
+<!-- OWNER MODAL -->
+<div id="ownerModal">
+  <div class="owner-box" id="ownerBoxLogin">
+    <div style="font-size:32px;margin-bottom:8px;">🔐</div>
+    <h3>Owner Access</h3>
+    <p>Enter the owner password to access admin controls.</p>
+    <input class="owner-inp" id="ownerPwInp" type="password" placeholder="Enter password..." onkeydown="if(event.key==='Enter')checkOwnerPw()"/>
+    <button class="owner-btn" onclick="checkOwnerPw()">Unlock</button>
+    <div class="owner-cancel" onclick="closeOwnerModal()">Cancel</div>
+  </div>
+  <div class="owner-box" id="ownerBoxPanel" style="display:none;">
+    <div style="font-size:32px;margin-bottom:6px;">👑</div>
+    <h3>Owner Panel</h3>
+    <p>Full admin access — Aussi-Nexus Group</p>
+    <div class="owner-panel">
+      <h4>📊 Platform Stats</h4>
+      <div class="owner-stat"><span>Total Users</span><b>52,418,209</b></div>
+      <div class="owner-stat"><span>Online Now</span><b id="ownerOnline">214,338</b></div>
+      <div class="owner-stat"><span>Daily Revenue</span><b>A$48,291</b></div>
+      <div class="owner-stat"><span>PXC Circulating</span><b>9.7B</b></div>
+      <div class="owner-stat"><span>Worlds Published</span><b>3,142,887</b></div>
+      <div class="owner-stat"><span>PXC Balance (you)</span><b id="ownerPxc"></b></div>
+    </div>
+    <div class="owner-action">
+      <div class="oact-btn" onclick="ownerAddPxc()">➕ Add 10,000 PXC</div>
+      <div class="oact-btn" onclick="toast('🚨 Maintenance mode toggled')">🔧 Maintenance</div>
+      <div class="oact-btn" onclick="toast('📢 Announcement sent to all users')">📢 Announce</div>
+      <div class="oact-btn" onclick="toast('🗑️ Cache cleared successfully')">🗑️ Clear Cache</div>
+    </div>
+    <div style="margin-top:14px;">
+      <div class="owner-cancel" onclick="closeOwnerModal()">✕ Close Panel</div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════ DATA ══════════
+const games = [
+  {e:'🏰',t:'Castle Siege',p:'44,201',r:'4.9',badge:'hot',bg:'#fce4ec'},
+  {e:'🌊',t:'Ocean Explorers',p:'29,100',r:'4.8',badge:'new',bg:'#e3f2fd'},
+  {e:'🚀',t:'Star Raiders',p:'19,800',r:'4.7',badge:'',bg:'#ede7ff'},
+  {e:'🏎️',t:'Pixel Race Cup',p:'16,400',r:'4.6',badge:'',bg:'#fff9e6'},
+  {e:'👻',t:'Ghost Mansion',p:'11,900',r:'4.5',badge:'',bg:'#f3e5f5'},
+  {e:'🧩',t:'Mind Warp',p:'9,200',r:'4.8',badge:'new',bg:'#e8f5e9'},
+];
+const staff = [
+  {e:'🌋',t:'Volcano Escape',p:'7,800',r:'4.9',badge:'',bg:'#fbe9e7'},
+  {e:'🏝️',t:'Island Survival',p:'6,500',r:'4.7',badge:'',bg:'#e0f2f1'},
+  {e:'⚔️',t:'Pixel Warriors',p:'5,900',r:'4.6',badge:'hot',bg:'#ede7ff'},
+  {e:'🤖',t:'Robot Uprising',p:'5,100',r:'4.8',badge:'',bg:'#e8eaf6'},
+  {e:'🌌',t:'Galaxy Quest',p:'4,600',r:'4.7',badge:'new',bg:'#e3f2fd'},
+  {e:'🎭',t:'Roleplay Town',p:'4,000',r:'4.5',badge:'',bg:'#fff8e1'},
+];
+const mktItems = [
+  {e:'🗡️',n:'Pixel Blade',p:320,cat:'weapon'},
+  {e:'🛡️',n:'Hero Shield',p:280,cat:'weapon'},
+  {e:'🧙',n:'Wizard Robe',p:190,cat:'avatar'},
+  {e:'🐲',n:'Dragon Mount',p:850,cat:'vehicle'},
+  {e:'🏡',n:'Sky Cottage',p:1200,cat:'home'},
+  {e:'🚗',n:'Neon Kart',p:640,cat:'vehicle'},
+  {e:'👑',n:'Champion Crown',p:420,cat:'avatar'},
+  {e:'🔮',n:'Crystal Staff',p:380,cat:'weapon'},
+  {e:'🏰',n:'Castle Base',p:990,cat:'home'},
+  {e:'🦅',n:'Phoenix Wings',p:560,cat:'avatar'},
+  {e:'🐶',n:'Pixel Pup',p:300,cat:'pet'},
+  {e:'🐱',n:'Neon Kitty',p:280,cat:'pet'},
+  {e:'🦊',n:'Fox Companion',p:400,cat:'pet'},
+  {e:'🚀',n:'Rocket Bike',p:720,cat:'vehicle'},
+];
+const friends = [
+  {e:'🦊',n:'FoxRunner99',s:'Playing: Castle Siege',cls:'s-gm'},
+  {e:'🐺',n:'WolfKing_AU',s:'Online',cls:'s-on'},
+  {e:'🦁',n:'LionStrike',s:'Playing: Star Raiders',cls:'s-gm'},
+  {e:'🐉',n:'DrakeSlayer',s:'Offline',cls:'s-off'},
+  {e:'🦋',n:'PixelQueen',s:'Online',cls:'s-on'},
+  {e:'🐸',n:'FroggyJumps',s:'Online',cls:'s-on'},
+];
+const chatSeed = [
+  {e:'🦊',n:'FoxRunner99',m:'Just hit level 50 in Castle Siege! Anyone team up? 🏰',self:false},
+  {e:'🎉',n:'PIXELORIA',m:'🎊 Weekly Tournament starts in 2 hours! Prize: 50,000 PXC!',self:false},
+  {e:'🐺',n:'WolfKing_AU',m:'My new world "Crystal Caves" just went live — check it out!',self:false},
+  {e:'🦁',n:'LionStrike',m:'The new Dragon Mount is amazing 🐲🔥',self:false},
+];
+
+const faces=['🦸','🧙','🐉','🦊','🤖','👽','🧝','🦸‍♀️','🧜','🧚'];
+const bodyColors=['#7c5cfc','#ff6b6b','#00bcd4','#ff9800','#4caf50','#e91e8c','#9c27b0','#f5c5a3'];
+const outfitList=['👔','🥋','🛡️','🧙','🎩','🦺','👗','🥼'];
+const accList=['👑','🗡️','🪄','🎭','🧢','🔮','⚡','🎪'];
+const legColors=['#1a1a2e','#7c5cfc','#ff6b6b','#00bcd4','#ff9800','#4caf50','#555','#333'];
+
+let pxc=5240, mktFilter='all', chatLog=[...chatSeed];
+let stTiles=Array(24).fill(null), selectedTool='🌱';
+
+// ══════════ INIT ══════════
+function init(){
+  renderGames('gameGrid',games);
+  renderGames('staffGrid',staff);
+  renderAvatarOptions();
+  renderMkt();
+  renderFriends();
+  renderChat();
+  initStudio();
+  initGame();
+  document.querySelectorAll('.cat').forEach(c=>c.onclick=function(){
+    document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    toast('Browsing: '+this.textContent);
+  });
+}
+
+function renderGames(id,data){
+  document.getElementById(id).innerHTML=data.map(d=>`
+    <div class="game-card" onclick="toast('🎮 Launching ${d.t}...')">
+      <div class="game-thumb" style="background:${d.bg}">
+        <span>${d.e}</span>
+        ${d.badge?`<div class="gbadge ${d.badge}">${d.badge.toUpperCase()}</div>`:''}
+      </div>
+      <div class="game-info">
+        <div class="game-title">${d.t}</div>
+        <div class="game-meta">
+          <span><span class="live-dot"></span>${parseInt(d.p).toLocaleString()}</span>
+          <span>⭐ ${d.r}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ══════════ AVATAR ══════════
+function renderAvatarOptions(){
+  const fg=(id,arr,fn)=>{
+    document.getElementById(id).innerHTML=arr.map((v,i)=>
+      `<div class="opt-chip${i===0?' sel':''}" onclick="selectChip(this,'${id}');(${fn.toString()})('${v}')">${v}</div>`
+    ).join('');
+  };
+  fg('charFaces',faces,v=>{document.getElementById('avHead').textContent=v;});
+  fg('outfits',outfitList,v=>toast('Outfit: '+v));
+  fg('accList',accList,v=>toast('Accessory: '+v));
+  // Swatches
+  ['bodySwatches','legSwatches'].forEach((id,idx)=>{
+    const colors=idx===0?bodyColors:legColors;
+    const targets=idx===0?['avBody','avArmL','avArmR']:['avLegL','avLegR'];
+    document.getElementById(id).innerHTML=colors.map((c,i)=>
+      `<div class="swatch${i===0?' sel':''}" style="background:${c}" onclick="selectSwatch(this,'${id}');targets_${idx}().forEach(t=>{document.getElementById(t).style.background='${c}'})"></div>`
+    ).join('');
+    // expose targets
+    window['targets_'+idx]=()=>targets;
+  });
+}
+function selectChip(el,id){
+  document.getElementById(id).querySelectorAll('.opt-chip').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selectSwatch(el,id){
+  document.getElementById(id).querySelectorAll('.swatch').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function saveAvatar(){toast('✅ Avatar saved successfully!');}
+function randomAvatar(){
+  const rc=bodyColors[Math.floor(Math.random()*bodyColors.length)];
+  const rl=legColors[Math.floor(Math.random()*legColors.length)];
+  ['avBody','avArmL','avArmR'].forEach(id=>document.getElementById(id).style.background=rc);
+  ['avLegL','avLegR'].forEach(id=>document.getElementById(id).style.background=rl);
+  document.getElementById('avHead').textContent=faces[Math.floor(Math.random()*faces.length)];
+  toast('🎲 Random avatar applied!');
+}
+
+// ══════════ MARKETPLACE ══════════
+function renderMkt(){
+  const items=mktFilter==='all'?mktItems:mktItems.filter(x=>x.cat===mktFilter);
+  document.getElementById('mktGrid').innerHTML=items.map(d=>`
+    <div class="mkt-card">
+      <div class="mkt-thumb" style="background:var(--sky)">${d.e}</div>
+      <div class="mkt-info">
+        <div class="mkt-name">${d.n}</div>
+        <div class="mkt-row">
+          <span class="price-tag">🌟 ${d.p.toLocaleString()}</span>
+          <button class="buy-btn" onclick="buyItem('${d.n}',${d.p})">Buy</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function setMktTab(el,cat){
+  document.querySelectorAll('.mkt-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active'); mktFilter=cat; renderMkt();
+}
+function buyItem(name,price){
+  if(pxc<price){toast('❌ Not enough PXC!');return;}
+  pxc-=price;
+  document.getElementById('pxcBadge').textContent=`🌟 ${pxc.toLocaleString()} PXC`;
+  document.getElementById('mktPxc').textContent=`🌟 ${pxc.toLocaleString()} PXC`;
+  toast(`✅ Purchased ${name}!`);
+}
+
+// ══════════ SOCIAL ══════════
+function renderFriends(){
+  document.getElementById('friendsList').innerHTML=friends.map(f=>`
+    <div class="friend-row">
+      <div class="f-av">${f.e}</div>
+      <div><div class="f-name">${f.n}</div>
+      <div class="f-status"><span class="sdot ${f.cls}"></span>${f.s}</div></div>
+    </div>`).join('');
+}
+function renderChat(){
+  const b=document.getElementById('chatMsgs');
+  b.innerHTML=chatLog.map(m=>`
+    <div class="chat-msg${m.self?' self':''}">
+      <div class="c-av">${m.e}</div>
+      <div class="c-bub"><div class="cn">${m.n}</div>${m.m}</div>
+    </div>`).join('');
+  b.scrollTop=b.scrollHeight;
+}
+function sendChat(){
+  const i=document.getElementById('chatInp');
+  if(!i.value.trim())return;
+  chatLog.push({e:'🦸',n:'PixelHero_Manas',m:i.value.trim(),self:true});
+  renderChat(); i.value='';
+}
+
+// ══════════ STUDIO ══════════
+function initStudio(){
+  stTiles=Array(24).fill(null);
+  renderStudio();
+}
+function renderStudio(){
+  document.getElementById('stWorld').innerHTML=stTiles.map((v,i)=>
+    `<div class="st-tile${v?' filled':''}" onclick="placeTile(${i})">${v||''}</div>`
+  ).join('');
+}
+function setTool(el,_,emoji){
+  selectedTool=emoji;
+  document.querySelectorAll('.st-item').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('toolLbl').textContent=emoji+' '+el.textContent.trim().split(' ').slice(1).join(' ');
+}
+function placeTile(i){
+  if(selectedTool==='❌'){stTiles[i]=null;}else{stTiles[i]=selectedTool;}
+  renderStudio();
+}
+function clearStudio(){stTiles=Array(24).fill(null);renderStudio();toast('Canvas cleared.');}
+function publishWorld(){
+  toast('🚀 Publishing "'+document.getElementById('worldName').value+'"...');
+  setTimeout(()=>toast('✅ World live on PIXELORIA!'),2200);
+}
+
+// ══════════ AI ══════════
+async function sendAI(){
+  const inp=document.getElementById('aiInp');
+  const msg=inp.value.trim(); if(!msg)return;
+  inp.value='';
+  addAiMsg(msg,true);
+  const th=addThinking();
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        system:`You are PIXEL, the friendly AI game guide inside PIXELORIA — a bright, colourful, family-friendly gaming platform (similar to Roblox) built by Aussi-Nexus Group, Australia. Help players design quests, create lore, invent characters, suggest mechanics, and build worlds. Be creative, enthusiastic, and kid-friendly. Use colourful emojis. Keep answers concise (3-5 sentences) but rich with ideas.`,
+        messages:[{role:'user',content:msg}]
+      })
+    });
+    const d=await r.json();
+    th.remove();
+    addAiMsg(d.content?.[0]?.text||'PIXEL lost the signal — try again!',false);
+  }catch(e){
+    th.remove();
+    addAiMsg('⚠️ PIXEL is offline right now. Check your connection and try again!',false);
+  }
+}
+function askAI(p){document.getElementById('aiInp').value=p;sendAI();switchScreen('ai',document.querySelectorAll('.nav-tab')[6]);}
+function addAiMsg(msg,user){
+  const b=document.getElementById('aiMsgs');
+  const d=document.createElement('div');
+  d.className='ai-msg'+(user?' user':'');
+  d.innerHTML=`<div class="ai-icon ${user?'user':''}">${user?'🦸':'🤖'}</div><div class="ai-text">${user?msg:'<b>PIXEL AI</b><br/>'+msg}</div>`;
+  b.appendChild(d); b.scrollTop=b.scrollHeight; return d;
+}
+function addThinking(){
+  const b=document.getElementById('aiMsgs');
+  const d=document.createElement('div');
+  d.className='ai-msg';
+  d.innerHTML=`<div class="ai-icon">🤖</div><div class="ai-text"><div class="ai-think"><div class="ai-d"></div><div class="ai-d"></div><div class="ai-d"></div></div></div>`;
+  b.appendChild(d); b.scrollTop=b.scrollHeight; return d;
+}
+
+// ══════════ LEGAL ══════════
+function setLegal(el,id){
+  document.querySelectorAll('.legal-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.legal-doc').forEach(d=>d.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('legal-'+id).classList.add('active');
+}
+
+// ══════════ GAME ENGINE ══════════
+let gameState={running:false,paused:false,score:0,lives:3,level:1,time:60};
+let player,platforms,stars,enemies,gameLoop,timerLoop;
+let keys={};
+
+function initGame(){
+  const canvas=document.getElementById('gameCanvas');
+  const wrap=canvas.parentElement;
+  canvas.width=wrap.offsetWidth||800;
+  canvas.height=wrap.offsetHeight||420;
+  resetGame();
+}
+
+function resetGame(){
+  clearInterval(gameLoop); clearInterval(timerLoop);
+  gameState={running:false,paused:false,score:0,lives:3,level:1,time:60};
+  updUI();
+  const c=document.getElementById('gameCanvas');
+  const W=c.width, H=c.height;
+  player={x:60,y:H-120,w:36,h:42,vx:0,vy:0,onGround:false,face:'🦸'};
+  platforms=[
+    {x:0,y:H-70,w:W,h:20,c:'#4caf50'},
+    {x:150,y:H-160,w:160,h:16,c:'#8d6e63'},
+    {x:380,y:H-220,w:140,h:16,c:'#8d6e63'},
+    {x:580,y:H-290,w:160,h:16,c:'#8d6e63'},
+    {x:160,y:H-340,w:120,h:16,c:'#ff9800'},
+    {x:420,y:H-390,w:120,h:16,c:'#ff9800'},
+  ];
+  stars=[];
+  for(let i=0;i<8;i++){
+    stars.push({x:100+i*90,y:H-200-Math.random()*180,r:14,col:true});
+  }
+  enemies=[
+    {x:300,y:H-110,w:32,h:32,vx:1.2,face:'👾'},
+    {x:500,y:H-110,w:32,h:32,vx:-1.0,face:'👾'},
+  ];
+  draw();
+}
+
+function startGame(){
+  if(gameState.running)return;
+  gameState.running=true; gameState.paused=false;
+  gameLoop=setInterval(update,16);
+  timerLoop=setInterval(()=>{
+    if(!gameState.paused&&gameState.running){
+      gameState.time--;
+      if(gameState.time<=0)endGame('⏰ Time\'s up!');
+      document.getElementById('timer').textContent=gameState.time;
+    }
+  },1000);
+}
+
+function pauseGame(){
+  gameState.paused=!gameState.paused;
+  toast(gameState.paused?'⏸ Paused':'▶ Resumed');
+}
+
+function endGame(msg){
+  clearInterval(gameLoop); clearInterval(timerLoop);
+  gameState.running=false;
+  toast(msg+' Score: '+gameState.score+' 🌟');
+  pxc+=Math.floor(gameState.score/10);
+  document.getElementById('pxcBadge').textContent=`🌟 ${pxc.toLocaleString()} PXC`;
+}
+
+function update(){
+  if(gameState.paused||!gameState.running)return;
+  const c=document.getElementById('gameCanvas');
+  const W=c.width, H=c.height;
+  const spd=3.8, jump=-13, grav=0.55;
+  // Input
+  if(keys['ArrowLeft']||keys['KeyA'])player.vx=-spd;
+  else if(keys['ArrowRight']||keys['KeyD'])player.vx=spd;
+  else player.vx*=0.8;
+  if((keys['ArrowUp']||keys['KeyW']||keys['Space'])&&player.onGround){
+    player.vy=jump; player.onGround=false;
+  }
+  player.vy+=grav;
+  player.x+=player.vx; player.y+=player.vy;
+  // Platform collision
+  player.onGround=false;
+  platforms.forEach(p=>{
+    if(player.x<p.x+p.w&&player.x+player.w>p.x&&
+       player.y+player.h>p.y&&player.y+player.h<p.y+p.h+player.vy+2&&player.vy>=0){
+      player.y=p.y-player.h; player.vy=0; player.onGround=true;
+    }
+  });
+  // Boundaries
+  if(player.x<0)player.x=0;
+  if(player.x+player.w>W)player.x=W-player.w;
+  if(player.y>H){gameState.lives--;updUI();if(gameState.lives<=0)endGame('💀 Game Over!');else{player.x=60;player.y=H-120;player.vy=0;}}
+  // Stars
+  stars.forEach(s=>{
+    if(s.col&&Math.abs(player.x+player.w/2-s.x)<24&&Math.abs(player.y+player.h/2-s.y)<24){
+      s.col=false; gameState.score+=10; updUI();
+    }
+  });
+  // All stars?
+  if(stars.every(s=>!s.col)){
+    gameState.level++; gameState.score+=50; gameState.time=60;
+    updUI(); toast('🎉 Level '+gameState.level+'! +50 bonus!');
+    stars.forEach(s=>s.col=true);
+  }
+  // Enemies
+  enemies.forEach(e=>{
+    e.x+=e.vx;
+    if(e.x<0||e.x+e.w>W)e.vx*=-1;
+    if(Math.abs(player.x+player.w/2-e.x-e.w/2)<28&&Math.abs(player.y+player.h/2-e.y-e.h/2)<28){
+      gameState.lives--; updUI();
+      if(gameState.lives<=0)endGame('💀 Game Over!');
+      else{player.x=60;player.y=H-120;player.vy=0;}
+    }
+  });
+  draw();
+}
+
+function updUI(){
+  document.getElementById('score').textContent=gameState.score;
+  document.getElementById('lives').textContent=gameState.lives;
+  document.getElementById('level').textContent=gameState.level;
+}
+
+function draw(){
+  const c=document.getElementById('gameCanvas');
+  const ctx=c.getContext('2d');
+  const W=c.width, H=c.height;
+  // Sky
+  const sky=ctx.createLinearGradient(0,0,0,H*.6);
+  sky.addColorStop(0,'#87ceeb'); sky.addColorStop(1,'#b3e5fc');
+  ctx.fillStyle=sky; ctx.fillRect(0,0,W,H*.6);
+  // Ground
+  const gnd=ctx.createLinearGradient(0,H*.6,0,H);
+  gnd.addColorStop(0,'#a5d6a7'); gnd.addColorStop(1,'#81c784');
+  ctx.fillStyle=gnd; ctx.fillRect(0,H*.6,W,H*.4);
+  // Clouds
+  ctx.fillStyle='rgba(255,255,255,0.7)';
+  [[80,40,60],[250,55,45],[480,35,55],[680,50,50]].forEach(([x,y,r])=>{
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(x+r*.7,y+8,r*.7,0,Math.PI*2);ctx.fill();
+  });
+  // Platforms
+  platforms.forEach(p=>{
+    ctx.fillStyle=p.c;
+    ctx.beginPath();ctx.roundRect(p.x,p.y,p.w,p.h,6);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.25)';
+    ctx.fillRect(p.x+4,p.y+2,p.w-8,4);
+  });
+  // Stars
+  stars.forEach(s=>{
+    if(!s.col)return;
+    ctx.font='22px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('⭐',s.x,s.y);
+  });
+  // Enemies
+  enemies.forEach(e=>{
+    ctx.font='28px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(e.face,e.x+e.w/2,e.y+e.h/2);
+  });
+  // Player
+  ctx.font='32px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText(player.face,player.x+player.w/2,player.y+player.h/2);
+  // Score overlay
+  ctx.fillStyle='rgba(255,255,255,0.85)';
+  ctx.beginPath();ctx.roundRect(10,10,160,36,10);ctx.fill();
+  ctx.fillStyle='#7c5cfc';ctx.font='bold 14px Segoe UI';
+  ctx.textAlign='left';ctx.textBaseline='middle';
+  ctx.fillText(`🌟 ${gameState.score}  ❤️ ${gameState.lives}`,20,28);
+  if(!gameState.running){
+    ctx.fillStyle='rgba(124,92,252,0.15)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#7c5cfc';ctx.font='bold 28px Segoe UI';
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('Press ▶ Start to Play!',W/2,H/2);
+  }
+}
+
+// ══════════ NAV ══════════
+function switchScreen(id,tabEl){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(tabEl)tabEl.classList.add('active');
+  if(id==='game'){setTimeout(()=>initGame(),50);}
+}
+
+// ══════════ TOAST ══════════
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ══════════ KEYS ══════════
+document.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown'].includes(e.code)&&gameState.running)e.preventDefault();});
+document.addEventListener('keyup',e=>{keys[e.code]=false;});
+
+window.addEventListener('resize',()=>{if(document.getElementById('screen-game').classList.contains('active'))initGame();});
+
+// ══════════ PRICING ══════════
+let isAnnual = false;
+const prices = {
+  adventurer: { monthly: 6.99, annual: 5.59 },
+  champion:   { monthly: 14.99, annual: 11.99 },
+  studio:     { monthly: 29.99, annual: 23.99 }
+};
+function toggleBilling(){
+  isAnnual = !isAnnual;
+  const t = document.getElementById('billingToggle');
+  t.classList.toggle('annual', isAnnual);
+  const k = isAnnual ? 'annual' : 'monthly';
+  document.getElementById('price-adventurer').innerHTML = `<sup>A$</sup>${prices.adventurer[k].toFixed(2)}<sub>/mo</sub>`;
+  document.getElementById('price-champion').innerHTML   = `<sup>A$</sup>${prices.champion[k].toFixed(2)}<sub>/mo</sub>`;
+  document.getElementById('price-studio').innerHTML     = `<sup>A$</sup>${prices.studio[k].toFixed(2)}<sub>/mo</sub>`;
+}
+function selectPlan(name){
+  toast(`💳 Redirecting to Stripe checkout for ${name}...`);
+  setTimeout(()=>toast(`✅ Stripe checkout ready! (Wire Stripe key to activate)`), 1800);
+}
+function buyPxc(amount, price){
+  toast(`💳 Purchasing ⭐${amount.toLocaleString()} PXC for A$${price}...`);
+  setTimeout(()=>{
+    pxc += amount;
+    document.getElementById('pxcBadge').textContent = `🌟 ${pxc.toLocaleString()} PXC`;
+    document.getElementById('mktPxc').textContent = `🌟 ${pxc.toLocaleString()} PXC`;
+    toast(`✅ ⭐${amount.toLocaleString()} PXC added to your wallet!`);
+  }, 1600);
+}
+
+// ══════════ OWNER DOT ══════════
+function openOwnerModal(){
+  document.getElementById('ownerModal').classList.add('open');
+  document.getElementById('ownerBoxLogin').style.display = 'block';
+  document.getElementById('ownerBoxPanel').style.display = 'none';
+  document.getElementById('ownerPwInp').value = '';
+  setTimeout(()=>document.getElementById('ownerPwInp').focus(), 100);
+}
+function closeOwnerModal(){
+  document.getElementById('ownerModal').classList.remove('open');
+}
+function checkOwnerPw(){
+  const pw = document.getElementById('ownerPwInp').value;
+  if(pw === 'manas724'){
+    document.getElementById('ownerBoxLogin').style.display = 'none';
+    document.getElementById('ownerBoxPanel').style.display = 'block';
+    document.getElementById('ownerPxc').textContent = `⭐ ${pxc.toLocaleString()}`;
+    document.getElementById('ownerOnline').textContent = (210000 + Math.floor(Math.random()*10000)).toLocaleString();
+  } else {
+    document.getElementById('ownerPwInp').style.borderColor = 'var(--coral)';
+    document.getElementById('ownerPwInp').value = '';
+    document.getElementById('ownerPwInp').placeholder = '❌ Incorrect — try again';
+    setTimeout(()=>{
+      document.getElementById('ownerPwInp').style.borderColor = '';
+      document.getElementById('ownerPwInp').placeholder = 'Enter password...';
+    }, 1800);
+  }
+}
+function ownerAddPxc(){
+  pxc += 10000;
+  document.getElementById('pxcBadge').textContent = `🌟 ${pxc.toLocaleString()} PXC`;
+  document.getElementById('mktPxc').textContent = `🌟 ${pxc.toLocaleString()} PXC`;
+  document.getElementById('ownerPxc').textContent = `⭐ ${pxc.toLocaleString()}`;
+  toast('✅ 10,000 PXC added to your wallet!');
+}
+document.getElementById('ownerModal').addEventListener('click', function(e){
+  if(e.target === this) closeOwnerModal();
+});
+
+init();
+</script>
+</body>
+</html>
